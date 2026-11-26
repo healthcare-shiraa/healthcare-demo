@@ -1,0 +1,106 @@
+# إدارة قاعدة نسخة العرض (demo) — تشغيل يدوي فقط من تبويب Actions.
+# كل القيم السرية تأتي من GitHub Secrets؛ لا شيء منها في الكود. GitHub يخفي قيم الأسرار في السجلات.
+#
+# أمان المدخلات: لا يُدرَج أي مدخل (inputs.*) مباشرة داخل أوامر run، لأن GitHub يستبدل التعبير
+# قبل تشغيل الطرفية، فيمكن لمدخل مصاغ بخبث أن ينفذ أوامر. المدخلات تُمرَّر كمتغيرات بيئة،
+# وتُفحص بنمط صارم قبل الاستخدام، وتُستعمل دائمًا بين علامتي تنصيص.
+name: demo-admin
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "العملية"
+        required: true
+        type: choice
+        options:
+          - init-database
+          - load-illustrative-rules
+          - create-demo-accounts
+          - verify-audit
+          - deactivate-user
+      username:
+        description: "اسم المستخدم (لعملية deactivate-user فقط): حروف إنجليزية صغيرة وأرقام و . _ -"
+        required: false
+        type: string
+      operator:
+        description: "اسم المنفّذ (يُسجَّل في سجل التدقيق): حروف وأرقام ومسافات فقط، حتى 60 حرفًا"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+# لا يعمل تشغيلان إداريان في الوقت نفسه
+concurrency:
+  group: demo-admin
+  cancel-in-progress: false
+
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    environment: demo
+    env:
+      HC_ENV: demo
+      HC_DISPLAY_TZ: Asia/Aden
+      HC_DEMO_ALLOW_ILLUSTRATIVE_RULES: "true"
+      HC_DEMO_DATABASE_URL: ${{ secrets.HC_DEMO_DATABASE_URL }}
+      HC_DEMO_ADMIN_DATABASE_URL: ${{ secrets.HC_DEMO_ADMIN_DATABASE_URL }}
+      HC_DEMO_AUDIT_HMAC_KEY: ${{ secrets.HC_DEMO_AUDIT_HMAC_KEY }}
+      # المدخلات كمتغيرات بيئة (لا تُستبدل داخل نص الأوامر)
+      IN_ACTION: ${{ inputs.action }}
+      IN_OPERATOR: ${{ inputs.operator }}
+      IN_USERNAME: ${{ inputs.username }}
+    steps:
+      - name: validate-inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          # اسم المنفّذ: حروف (عربية أو إنجليزية) وأرقام ومسافات و . _ - فقط، من 2 إلى 60 حرفًا
+          if ! printf '%s' "$IN_OPERATOR" | grep -Pq '^[\p{L}\p{N} ._-]{2,60}$'; then
+            echo "::error::اسم المنفّذ غير صالح"; exit 1
+          fi
+          if [ "$IN_ACTION" = "deactivate-user" ]; then
+            if ! printf '%s' "$IN_USERNAME" | grep -Eq '^[a-z][a-z0-9_.-]{2,31}$'; then
+              echo "::error::اسم المستخدم غير صالح"; exit 1
+            fi
+          fi
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+
+      - name: init-database
+        if: inputs.action == 'init-database'
+        env:
+          APP_ROLE_PASSWORD: ${{ secrets.HC_DEMO_APP_ROLE_PASSWORD }}
+        run: |
+          python scripts/create_app_role.py --role hc_app
+          python scripts/init_db.py --app-role hc_app
+
+      - name: load-illustrative-rules
+        if: inputs.action == 'load-illustrative-rules'
+        run: python scripts/load_demo_illustrative.py --operator "$IN_OPERATOR"
+
+      - name: create-demo-accounts
+        if: inputs.action == 'create-demo-accounts'
+        env:
+          PW_REG: ${{ secrets.HC_DEMO_PW_REGISTRATION }}
+          PW_DOC: ${{ secrets.HC_DEMO_PW_DOCTOR }}
+          PW_PH: ${{ secrets.HC_DEMO_PW_PHARMACIST }}
+          PW_RN: ${{ secrets.HC_DEMO_PW_NURSE }}
+        run: |
+          printf '%s\n' "$PW_REG" | python scripts/manage_users.py create --username reg.demo --full-name "سلمى (موظفة تسجيل)" --role registration --operator "$IN_OPERATOR" --password-stdin
+          printf '%s\n' "$PW_DOC" | python scripts/manage_users.py create --username dr.demo --full-name "د. خالد (طبيب)" --role doctor --operator "$IN_OPERATOR" --password-stdin
+          printf '%s\n' "$PW_PH"  | python scripts/manage_users.py create --username ph.demo --full-name "د. منى (صيدلانية سريرية)" --role pharmacist --operator "$IN_OPERATOR" --password-stdin
+          printf '%s\n' "$PW_RN"  | python scripts/manage_users.py create --username rn.demo --full-name "أحمد (ممرض)" --role nurse --operator "$IN_OPERATOR" --password-stdin
+
+      - name: verify-audit
+        if: inputs.action == 'verify-audit'
+        run: python scripts/verify_audit.py verify
+
+      - name: deactivate-user
+        if: inputs.action == 'deactivate-user'
+        run: python scripts/manage_users.py deactivate --username "$IN_USERNAME" --operator "$IN_OPERATOR"

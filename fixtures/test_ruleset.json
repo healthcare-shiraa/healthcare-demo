@@ -1,0 +1,245 @@
+{
+  "label": "مجموعة قواعد اختبار وهمية (غير سريرية)",
+  "synthetic": true,
+  "allergens": [
+    "حساسية-اختبار-أ",
+    "حساسية-اختبار-ب",
+    "حساسية-اختبار-ج"
+  ],
+  "frequencies": [
+    {
+      "code": "test-q6h",
+      "label": "كل 6 ساعة (اختبار)",
+      "interval_hours": 6
+    },
+    {
+      "code": "test-q8h",
+      "label": "كل 8 ساعة (اختبار)",
+      "interval_hours": 8
+    },
+    {
+      "code": "test-q12h",
+      "label": "كل 12 ساعة (اختبار)",
+      "interval_hours": 12
+    },
+    {
+      "code": "test-q24h",
+      "label": "كل 24 ساعة (اختبار)",
+      "interval_hours": 24
+    }
+  ],
+  "medications": [
+    {
+      "name": "دواء-اختبار-أ",
+      "unit": "وحدة-اختبار",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "test-q6h",
+        "test-q8h",
+        "test-q12h",
+        "test-q24h"
+      ]
+    },
+    {
+      "name": "دواء-اختبار-ب",
+      "unit": "وحدة-اختبار",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "test-q6h",
+        "test-q8h",
+        "test-q12h",
+        "test-q24h"
+      ]
+    },
+    {
+      "name": "دواء-اختبار-ج",
+      "unit": "وحدة-اختبار",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "test-q6h",
+        "test-q8h",
+        "test-q12h",
+        "test-q24h"
+      ]
+    },
+    {
+      "name": "دواء-اختبار-د",
+      "unit": "وحدة-اختبار",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "test-q6h",
+        "test-q8h",
+        "test-q12h",
+        "test-q24h"
+      ]
+    },
+    {
+      "name": "دواء-اختبار-هـ",
+      "unit": "وحدة-اختبار",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "test-q6h",
+        "test-q8h",
+        "test-q12h",
+        "test-q24h"
+      ]
+    }
+  ],
+  "not_given_reasons": [
+    {
+      "code": "dose_mismatch",
+      "label": "الجرعة المتاحة تختلف عن المقررة (اختبار)",
+      "requires_text": false
+    },
+    {
+      "code": "missed_window",
+      "label": "فات موعد الجرعة (اختبار)",
+      "requires_text": false
+    },
+    {
+      "code": "patient_unavailable",
+      "label": "المريض غير متاح (اختبار)",
+      "requires_text": false
+    },
+    {
+      "code": "other",
+      "label": "سبب آخر يُكتب نصًا (اختبار)",
+      "requires_text": true
+    }
+  ],
+  "rules": [
+    {
+      "code": "T-R1",
+      "type": "allergy",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "allergen": "حساسية-اختبار-أ",
+          "medication": "دواء-اختبار-أ"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط وهمي 1: أؤكد مراجعة سجل الحساسية مع المريض",
+          "evidence": "confirm"
+        },
+        {
+          "text": "شرط وهمي 2: اكتب وصف التحقق الذي أجريته",
+          "evidence": "text"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R1): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R2",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "return_only",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "medication_a": "دواء-اختبار-ب",
+          "medication_b": "دواء-اختبار-ج"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R2): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R3",
+      "type": "interaction",
+      "severity": "non_critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "medication_a": "دواء-اختبار-أ",
+          "medication_b": "دواء-اختبار-د"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R3): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R4",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "medication_a": "دواء-اختبار-ب",
+          "medication_b": "دواء-اختبار-د"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط وهمي: أؤكد التواصل مع الطبيب الواصف",
+          "evidence": "confirm"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R4): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R5",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "lookback_hours": 12,
+      "conditions": [
+        {
+          "medication_a": "دواء-اختبار-ج",
+          "medication_b": "دواء-اختبار-هـ"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط وهمي: أؤكد خطة المتابعة",
+          "evidence": "confirm"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R5): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R6",
+      "type": "allergy",
+      "severity": "critical",
+      "resolution_policy": "return_only",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "allergen": "حساسية-اختبار-ب",
+          "medication": "دواء-اختبار-ج"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R6): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    },
+    {
+      "code": "T-R7",
+      "type": "interaction",
+      "severity": "non_critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "medication_a": "دواء-اختبار-أ",
+          "medication_b": "دواء-اختبار-هـ"
+        }
+      ],
+      "alert_text": "تنبيه اختباري وهمي (T-R7): ليس معلومة سريرية.",
+      "source_note": "قاعدة وهمية لاختبار آليات النظام فقط. ليست معلومة سريرية ولم تُراجع طبيًا."
+    }
+  ]
+}

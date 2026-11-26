@@ -1,0 +1,19 @@
+.streamlit/secrets.toml
+*.db
+*.db-wal
+*.db-shm
+__pycache__/
+.pytest_cache/
+*.jsonl
+anchor*.json
+# أسرار وملفات محلية لا تُرفع أبدًا
+.env
+.env.*
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+# الفيديو والتسجيلات (تُسلَّم خارج المستودع)
+*.mp4
+*.webm
+*.mov

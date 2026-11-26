@@ -1,0 +1,7 @@
+{
+  "_comment": "قيم تشغيلية توضيحية لنسخة العرض فقط؛ ليست قيمًا معتمدة",
+  "dose_window_minutes": "60",
+  "late_documentation_max_hours": "24",
+  "missed_dose_sequence_policy": "warn",
+  "max_treatment_days": "7"
+}

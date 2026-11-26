@@ -1,0 +1,245 @@
+{
+  "label": "قواعد توضيحية لنسخة العرض (غير معتمدة سريريًا)",
+  "kind": "illustrative",
+  "allergens": [
+    "حساسية-توضيحية-١",
+    "حساسية-توضيحية-٢",
+    "حساسية-توضيحية-٣"
+  ],
+  "frequencies": [
+    {
+      "code": "demo-q6h",
+      "label": "كل 6 ساعة (توضيحي)",
+      "interval_hours": 6
+    },
+    {
+      "code": "demo-q8h",
+      "label": "كل 8 ساعة (توضيحي)",
+      "interval_hours": 8
+    },
+    {
+      "code": "demo-q12h",
+      "label": "كل 12 ساعة (توضيحي)",
+      "interval_hours": 12
+    },
+    {
+      "code": "demo-q24h",
+      "label": "كل 24 ساعة (توضيحي)",
+      "interval_hours": 24
+    }
+  ],
+  "medications": [
+    {
+      "name": "دواء-توضيحي-١",
+      "unit": "وحدة-توضيحية",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "demo-q6h",
+        "demo-q8h",
+        "demo-q12h",
+        "demo-q24h"
+      ]
+    },
+    {
+      "name": "دواء-توضيحي-٢",
+      "unit": "وحدة-توضيحية",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "demo-q6h",
+        "demo-q8h",
+        "demo-q12h",
+        "demo-q24h"
+      ]
+    },
+    {
+      "name": "دواء-توضيحي-٣",
+      "unit": "وحدة-توضيحية",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "demo-q6h",
+        "demo-q8h",
+        "demo-q12h",
+        "demo-q24h"
+      ]
+    },
+    {
+      "name": "دواء-توضيحي-٤",
+      "unit": "وحدة-توضيحية",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "demo-q6h",
+        "demo-q8h",
+        "demo-q12h",
+        "demo-q24h"
+      ]
+    },
+    {
+      "name": "دواء-توضيحي-٥",
+      "unit": "وحدة-توضيحية",
+      "dose_min": "1",
+      "dose_max": "100",
+      "frequencies": [
+        "demo-q6h",
+        "demo-q8h",
+        "demo-q12h",
+        "demo-q24h"
+      ]
+    }
+  ],
+  "not_given_reasons": [
+    {
+      "code": "demo_dose_mismatch",
+      "label": "الجرعة المتاحة تختلف عن المقررة (توضيحي)",
+      "requires_text": false
+    },
+    {
+      "code": "demo_missed_window",
+      "label": "فات موعد الجرعة (توضيحي)",
+      "requires_text": false
+    },
+    {
+      "code": "demo_patient_unavailable",
+      "label": "المريض غير متاح (توضيحي)",
+      "requires_text": false
+    },
+    {
+      "code": "demo_other",
+      "label": "سبب آخر يُكتب نصًا (توضيحي)",
+      "requires_text": true
+    }
+  ],
+  "rules": [
+    {
+      "code": "D-R1",
+      "type": "allergy",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "allergen": "حساسية-توضيحية-١",
+          "medication": "دواء-توضيحي-١"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط توضيحي 1: أؤكد مراجعة سجل الحساسية مع المريض",
+          "evidence": "confirm"
+        },
+        {
+          "text": "شرط توضيحي 2: اكتب وصف التحقق الذي أجريته",
+          "evidence": "text"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R1): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R2",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "return_only",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "medication_a": "دواء-توضيحي-٢",
+          "medication_b": "دواء-توضيحي-٣"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R2): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R3",
+      "type": "interaction",
+      "severity": "non_critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "medication_a": "دواء-توضيحي-١",
+          "medication_b": "دواء-توضيحي-٤"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R3): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R4",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "medication_a": "دواء-توضيحي-٢",
+          "medication_b": "دواء-توضيحي-٤"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط توضيحي: أؤكد التواصل مع الطبيب الواصف",
+          "evidence": "confirm"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R4): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R5",
+      "type": "interaction",
+      "severity": "critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "lookback_hours": 12,
+      "conditions": [
+        {
+          "medication_a": "دواء-توضيحي-٣",
+          "medication_b": "دواء-توضيحي-٥"
+        }
+      ],
+      "resolution_requirements": [
+        {
+          "text": "شرط توضيحي: أؤكد خطة المتابعة",
+          "evidence": "confirm"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R5): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R6",
+      "type": "allergy",
+      "severity": "critical",
+      "resolution_policy": "return_only",
+      "existing_prescription_policy": "block_until_resolved",
+      "conditions": [
+        {
+          "allergen": "حساسية-توضيحية-٢",
+          "medication": "دواء-توضيحي-٣"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R6): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    },
+    {
+      "code": "D-R7",
+      "type": "interaction",
+      "severity": "non_critical",
+      "resolution_policy": "conditional",
+      "existing_prescription_policy": "warn_only",
+      "conditions": [
+        {
+          "medication_a": "دواء-توضيحي-١",
+          "medication_b": "دواء-توضيحي-٥"
+        }
+      ],
+      "alert_text": "تنبيه توضيحي (D-R7): غير معتمد سريريًا — لعرض آلية النظام فقط.",
+      "source_note": "قاعدة توضيحية لعرض آليات النظام فقط. غير معتمدة سريريًا، ولا تمثل أي معلومة طبية."
+    }
+  ]
+}
